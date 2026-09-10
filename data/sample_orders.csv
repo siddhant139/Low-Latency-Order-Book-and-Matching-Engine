@@ -1,0 +1,23 @@
+# Sample order feed: N=new, C=cancel, M=modify
+# Format: N,id,side,type,price,qty | C,id | M,id,qty,price
+# Build a book with resting bids and asks
+N,1,BID,LIMIT,104.75,300
+N,2,BID,LIMIT,105.00,100
+N,3,ASK,LIMIT,105.50,200
+N,4,ASK,LIMIT,105.25,150
+# Crossing buy order: 105.25 limit buy 100 -> matches ask #4 at 105.25
+N,5,BID,LIMIT,105.25,100
+# Partial fill: sell 250 at 105.00 -> hits bid #2 (100) then bid #1 (150)
+N,6,ASK,LIMIT,105.00,250
+# Cancel remaining bid #1
+C,1
+# New resting orders
+N,7,BID,LIMIT,104.50,500
+N,8,ASK,LIMIT,105.75,400
+# Modify order #8: reduce qty (retains priority)
+M,8,200,105.75
+# Market buy: consumes best asks
+N,9,BID,MARKET,0,100
+# Add more depth
+N,10,BID,LIMIT,104.25,600
+N,11,ASK,LIMIT,106.00,300
